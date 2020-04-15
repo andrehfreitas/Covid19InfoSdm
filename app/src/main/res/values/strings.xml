@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Covid19InfoSdm</string>
+    <string name="text">Texto</string>
+    <string name="graph">Gráfico</string>
+</resources>
