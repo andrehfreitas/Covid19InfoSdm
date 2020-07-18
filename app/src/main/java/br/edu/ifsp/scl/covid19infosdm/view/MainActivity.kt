@@ -48,9 +48,7 @@ class MainActivity : AppCompatActivity() {
         viewModel = Covid19ViewModel(this)
 
         countryAdapterInit()
-
         informationAdapterInit()
-
         statusAdapterInit()
     }
 
@@ -72,7 +70,6 @@ class MainActivity : AppCompatActivity() {
             }
         )
     }
-
 
 
     private fun informationAdapterInit() {
