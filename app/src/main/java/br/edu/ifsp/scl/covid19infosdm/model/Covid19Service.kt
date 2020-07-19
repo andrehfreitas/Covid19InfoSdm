@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import br.edu.ifsp.scl.covid19infosdm.R
 import br.edu.ifsp.scl.covid19infosdm.model.Covid19Api.BASE_URL
 import br.edu.ifsp.scl.covid19infosdm.model.Covid19Api.COUNTRIES_ENDPOINT
-import br.edu.ifsp.scl.covid19infosdm.model.Covid19Api.SUMMARY_ENDPOINT
 import br.edu.ifsp.scl.covid19infosdm.model.dataclass.*
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonArrayRequest
@@ -37,21 +36,6 @@ class Covid19Service(val context: Context) {
 
         return countriesListLd
     }
-
-    /*fun getCountry(): MutableLiveData<SummaryList>{
-        val url = "${BASE_URL}${SUMMARY_ENDPOINT}"
-        val countriesListLd = MutableLiveData<SummaryList>()
-        val request = JsonArrayRequest(
-            Request.Method.GET,
-            url,null,
-            {summaryCountries -> countriesListLd.value = gson.fromJson(summaryCountries.toString(), SummaryList::class.java)},
-            { error -> Log.e("Covid19InfoSdm", "${error.message}")}
-        )
-        requestQueue.add(request)
-
-        return countriesListLd
-    }*/
-
 
     // Implementação da Interface RetrofitServices do objeto Covid19Api usando um objeto retrofit
     private fun retrofitServices(): Retrofit{
@@ -95,9 +79,26 @@ class Covid19Service(val context: Context) {
     }
 
 
+    // Retorna a data da ultima atualizaçao dos dados no WebService
+    fun getSummaryDate(): MutableLiveData<String> {
+        val responseList = MutableLiveData<String>()
 
+        service.getSummaryGlobal().enqueue(object: Callback<SummaryList>{
+            override fun onResponse(call: Call<SummaryList>, response: Response<SummaryList>) {
+                if (response.isSuccessful){
+                    responseList.value = response.body()?.date
+                }
+            }
+            override fun onFailure(call: Call<SummaryList>, t: Throwable) {
+                Log.e(context.getString(R.string.app_name), "Falha no acesso ao serviço")
+            }
+        })
+        return responseList
+    }
+
+
+    // Retorna os dados de Covid no mundo
     fun getSummaryGlobal(): MutableLiveData<SummaryGlobal> {
-
         val responseList = MutableLiveData<SummaryGlobal>()
 
             service.getSummaryGlobal().enqueue(object: Callback<SummaryList>{
@@ -114,8 +115,8 @@ class Covid19Service(val context: Context) {
     }
 
 
+    // Retorna os dados de Covid no pais passado como parametro na funçao
     fun getSummaryCountry(country: String): MutableLiveData<SummaryCountries> {
-
         val responseList = MutableLiveData<SummaryCountries>()
 
         service.getSummaryGlobal().enqueue(object: Callback<SummaryList>{
@@ -134,27 +135,4 @@ class Covid19Service(val context: Context) {
         })
         return responseList
     }
-
-
-   /* fun getCountry(): MutableLiveData<ArrayList<SummaryCountries>> {
-
-        var lista = ArrayList<SummaryCountries>()
-        val responseList = MutableLiveData<ArrayList<SummaryCountries>>()
-
-        service.getSummaryGlobal().enqueue(object: Callback<SummaryList>{
-            override fun onResponse(call: Call<SummaryList>, response: Response<SummaryList>) {
-                if (response.isSuccessful) {
-                    response.body()?.countries?.forEach { summaryCountries ->
-                        lista.add(summaryCountries)
-                    }
-                    responseList.value = lista
-                }
-            }
-            override fun onFailure(call: Call<SummaryList>, t: Throwable) {
-                Log.e(context.getString(R.string.app_name), "Falha no acesso ao serviço")
-            }
-        })
-        return responseList
-    }*/
-
 }

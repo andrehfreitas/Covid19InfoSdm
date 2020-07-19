@@ -16,7 +16,7 @@ class Covid19ViewModel(context: Context): ViewModel() {
 
     fun fetchCountryData(countryCode: String) = model.getSummaryCountry(countryCode)
 
-//    fun fetchCountriesSummary() = model.getCountry()
+    fun fetchSummaryDate() = model.getSummaryDate()
 
     fun fetchDayOne(countryName: String, status: String) = model.callService(
         countryName, status.toLowerCase(Locale.getDefault()),
