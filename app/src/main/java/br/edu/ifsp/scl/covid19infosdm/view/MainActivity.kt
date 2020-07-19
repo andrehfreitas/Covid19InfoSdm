@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun countryAdapterInit() {
         /* Preenchido por Web Service */
-        countryAdapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1)
+        countryAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1)
         countryNameSlugMap = mutableMapOf()
         countrySp.adapter = countryAdapter
         viewModel.fetchCountries().observe(

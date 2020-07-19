@@ -14,7 +14,9 @@ class Covid19ViewModel(context: Context): ViewModel() {
 
     fun fetchSummary() = model.getSummaryGlobal()
 
-    fun fetchCountryData(countryName: String) = model.getSummaryCountry(countryName)
+    fun fetchCountryData(countryCode: String) = model.getSummaryCountry(countryCode)
+
+//    fun fetchCountriesSummary() = model.getCountry()
 
     fun fetchDayOne(countryName: String, status: String) = model.callService(
         countryName, status.toLowerCase(Locale.getDefault()),
@@ -25,11 +27,4 @@ class Covid19ViewModel(context: Context): ViewModel() {
         countryName, status.toLowerCase(Locale.getDefault()),
         ByCountryResponseList::class.java
     )
-
-
- /*   fun fetchSummaryList(newCases: Int, totalCases: Int, newDeaths: Int, totalDeaths: Int,
-                         newRecovered: Int, totalRecovered: Int) = model.callService(
-        newCases, totalCases, newDeaths, totalDeaths, newRecovered, totalRecovered, SummaryList::class.java
-    )*/
-
 }

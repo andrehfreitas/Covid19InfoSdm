@@ -1,7 +1,10 @@
 package br.edu.ifsp.scl.covid19infosdm.view
 
 import android.os.Bundle
+import android.view.View
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import br.edu.ifsp.scl.covid19infosdm.R
@@ -22,14 +25,26 @@ class SummaryActivity : AppCompatActivity(){
 
         viewModel = Covid19ViewModel(this)
 
-        initGlobalData()
         countryAdapterPanelInit()
+
+        spnCountryPanel.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, position: Int, l: Long) {
+                if (position != 0){
+                    viewCountryData()
+                } else {
+                    initGlobalData()
+                }
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
+        }
     }
 
     private fun countryAdapterPanelInit() {
         /* Preenchido por Web Service */
-        countryAdapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1)
-        countryAdapter.add("Selecione o pais ... ")
+        countryAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1)
         countryNameSlugMap = mutableMapOf()
         spnCountryPanel.adapter = countryAdapter
         viewModel.fetchCountries().observe(
@@ -61,18 +76,19 @@ class SummaryActivity : AppCompatActivity(){
     }
 
     private fun viewCountryData(){
-        val countrySlug = countryNameSlugMap[spnCountryPanel.selectedItem.toString()]!!
-
-
-        viewModel.fetchCountryData(countrySlug).observe(
+        val country = spnCountryPanel.selectedItem.toString()
+        viewModel.fetchCountryData(country).observe(
             this,
             Observer { summaryCountry ->
+                txtRegion.text = summaryCountry.country
                 txtNewCases24h.text = formatNumber(summaryCountry.newConfirmed)
                 txtTotalCases.text = formatNumber(summaryCountry.totalConfirmed)
                 txtNewDeaths24h.text = formatNumber(summaryCountry.newDeaths)
                 txtTotalDeaths.text = formatNumber(summaryCountry.totalDeaths)
                 txtNewRecovered24h.text = formatNumber(summaryCountry.newRecovered)
                 txtTotalRecovered.text = formatNumber(summaryCountry.totalRecovered)
+                //Toast.makeText(this, summaryCountry.country, Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, country, Toast.LENGTH_SHORT).show()
             }
         )
     }

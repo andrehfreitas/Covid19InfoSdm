@@ -13,6 +13,11 @@
         android:layout_height="40dp"
         app:srcCompat="@drawable/logocorona" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Consulta detalhada"/>
+
     <Spinner
         android:id="@+id/spnCountryPanel"
         android:layout_width="match_parent"
@@ -38,6 +43,14 @@
         android:textStyle="bold"
         android:layout_marginTop="5dp"
         android:text="DADOS GLOBAIS"/>
+
+    <TextView
+        android:id="@+id/txtRegion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:layout_marginTop="5dp"
+        android:text="GLOBAL"/>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cdvNewCases24h"
