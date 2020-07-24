@@ -5,13 +5,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.DetalheCasosActivity">
+    tools:context=".view.DetalheCasosActivity"
+    android:padding="8dp">
 
     <TextView
         android:id="@+id/countryTv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="País"
+        android:text="@string/label_pais"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -28,7 +29,7 @@
         android:id="@+id/infoTv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Informação"
+        android:text="@string/label_informacao"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/countrySp" />
@@ -45,7 +46,7 @@
         android:id="@+id/statusTv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Status"
+        android:text="@string/label_status"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/infoSp" />
@@ -62,7 +63,7 @@
         android:id="@+id/viewModeTv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Modo de visualização"
+        android:text="@string/label_modo_visualizacao"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/statusSp"
@@ -98,11 +99,15 @@
         android:id="@+id/retrieveBt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Buscar"
+        android:text="@string/botao_buscar"
         android:onClick="onRetrieveClick"
+        android:background="@drawable/botao_customizado"
+        android:textStyle="bold"
+        android:stateListAnimator="@null"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/viewModeRg"/>
+        app:layout_constraintTop_toBottomOf="@id/viewModeRg"
+        tools:ignore="UnusedAttribute" />
 
     <com.jjoe64.graphview.GraphView
         android:id="@+id/resultGv"

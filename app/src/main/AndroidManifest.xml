@@ -10,16 +10,18 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".view.MainActivity">
+        android:theme="@style/AppTheme"
+        android:fullBackupContent="true">
+        <activity android:name=".view.MainActivity"
+                  android:label="Covid 19 SDM - PAINEL">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
         <activity
+            android:label="Covid 19 SDM - Estatisticas"
             android:name=".view.DetalheCasosActivity"
             android:parentActivityName=".view.MainActivity"/>
 

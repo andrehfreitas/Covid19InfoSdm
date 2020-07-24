@@ -5,17 +5,18 @@ import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import br.edu.ifsp.scl.covid19infosdm.R
 import br.edu.ifsp.scl.covid19infosdm.viewmodel.Covid19ViewModel
 import kotlinx.android.synthetic.main.activity_main.*
-
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
+import java.time.format.DateTimeFormatter
+import java.time.format.ResolverStyle
 import java.util.*
 
+@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: Covid19ViewModel
     private lateinit var countryAdapter: ArrayAdapter<String>
@@ -42,11 +43,10 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-            }
+            override fun onNothingSelected(p0: AdapterView<*>?) {}
         }
 
-        btnDetalheCasos.setOnClickListener {
+        btnCasesDayday.setOnClickListener {
             val intent = DetalheCasosActivity.getStartIntent(this)
             this.startActivity(intent)
         }
@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity() {
     private fun countryAdapterPanelInit() {
         /* Preenchido por Web Service */
         countryAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1)
-        countryAdapter.add("Dados globais")
+        countryAdapter.add("DADOS GLOBAIS")
         countryNameSlugMap = mutableMapOf()
         spnCountryPanel.adapter = countryAdapter
         viewModel.fetchCountries().observe(
@@ -72,25 +72,39 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI18n", "SimpleDateFormat")
     fun initData() {
         viewModel.fetchSummaryDate().observe(
             this,
             Observer {data ->
-                val dataRecebida = data
-                val indexT = dataRecebida.indexOf('T')
-                val indexZ = dataRecebida.indexOf('Z')
-                val parteData = dataRecebida.substring(0, indexT)
+                // Formatação da Data para formato usado no Brasil
+                val indexT = data.indexOf('T')
+                val indexZ = data.indexOf('Z')
+                val parteData = data.substring(0, indexT)
+                val formatoOrigem = SimpleDateFormat("yyyy-MM-dd")
+                val dataAplicada = formatoOrigem.parse(parteData)
+                formatoOrigem.applyPattern("dd/MM/yyyy")
+                val dataFormatada = formatoOrigem.format(dataAplicada)
 
-                txtDataAtualizacao.text = parteData + ' ' + dataRecebida.substring(indexT + 1, indexZ)
-                // txtDataAtualizacao.text = dataRecebida
+                /* Ajuste da data para o fuso horário do Brasil, data retornada do WebService
+                 está 3 horas a frente do Brasil */
+                val horaNova = when (val horaOriginal =
+                                   data.substring(indexT + 1, indexT + 3).toInt()) {
+                    0 -> 21
+                    1 -> 22
+                    2 -> 23
+                    else -> horaOriginal - 3
+                }
+                val horaAjustada = String.format("%02d", horaNova) + data.substring(indexT + 3, indexZ)
+
+                // Exibição da data formatada e hora ajustada no TextView
+                txtDataAtualizacao.text = "$dataFormatada $horaAjustada"
             }
         )
     }
 
     @SuppressLint("SetTextI18n")
     fun initGlobalData() {
-        val f = NumberFormat.getInstance(Locale("pt", "br"))
         viewModel.fetchSummary().observe(
             this,
             Observer { summaryGlobal ->
@@ -105,7 +119,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun viewCountryData() {
-        // Carrefa TextViews com 0 por padrao
+        // Carrefa TextViews com 0 por padrao e caso WebService nao retorne dados
         txtNewCases24h.text = formatNumber(0)
         txtTotalCases.text = formatNumber(0)
         txtNewDeaths24h.text = formatNumber(0)

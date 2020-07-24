@@ -15,11 +15,10 @@ object Covid19Api {
     Path: /countries
     Params: null */
     val COUNTRIES_ENDPOINT = "countries"
-    val SUMMARY_ENDPOINT = "summary"
 
     interface RetrofitServices {
 
-        // Pega os numeros globais referentes as ultimas 24 horas
+        // Pega os numeros de casos referentes as últimas 24 horas
         @GET("summary")
         fun getSummaryGlobal(): Call<SummaryList>
 

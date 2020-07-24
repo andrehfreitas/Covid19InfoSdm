@@ -1,5 +1,26 @@
 <resources>
-    <string name="app_name">Covid 19 SDM - Estatisticas</string>
+    <string name="app_name">Covid 19 SDM</string>
+
+    <!-- Main Activity -->
+    <string name="label_ultima_atualizacao">*Ultima atualizaçao:</string>
+    <string name="label_data_hora">Data e hora</string>
+    <string name="label_selecione_pais">Selecione um pais:</string>
+    <string name="label_casos_24_horas">Casos (Ultimas 24 horas)</string>
+    <string name="label_total_casos">Total de casos</string>
+    <string name="label_mortes_24_horas">Mortes (Ultimas 24 horas)</string>
+    <string name="label_total_mortes">Total de mortes</string>
+    <string name="label_recuperados_24_horas">Recuperados (Ultimas 24 horas)</string>
+    <string name="label_total_recuperado">Total de recuperados</string>
+    <string name="botao_casos_dia_dia">Consultar casos dia a dia</string>
+    <string name="logotipo_app">Logotipo app</string>
+
+    <!-- Detalhe Activity -->
+    <string name="botao_buscar">Buscar</string>
+    <string name="label_pais">País</string>
+    <string name="label_informacao">Informação</string>
+    <string name="label_status">Status</string>
+    <string name="label_modo_visualizacao">Modo de visualização</string>
     <string name="text">Texto</string>
     <string name="graph">Gráfico</string>
+
 </resources>

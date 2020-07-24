@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Switch
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import br.edu.ifsp.scl.covid19infosdm.R
@@ -29,16 +31,16 @@ class DetalheCasosActivity : AppCompatActivity() {
 
     /* Classe para os serviços que serão acessados */
     private enum class Information(val type: String){
-        DAY_ONE("Day One"),
-        BY_COUNTRY("By country")
+        DAY_ONE("Dia um"),
+        BY_COUNTRY("Por país")
     }
 
 
     /* Classe para o status que será buscado no serviço */
     private enum class Status(val type: String){
-        CONFIRMED("Confirmed"),
-        RECOVERED("Recovered"),
-        DEATHS("Deaths")
+        CONFIRMED("Confirmados"),
+        DEATHS("Mortos"),
+        RECOVERED("Recuperados")
     }
 
 
@@ -57,6 +59,7 @@ class DetalheCasosActivity : AppCompatActivity() {
     private fun countryAdapterInit() {
         /* Preenchido por Web Service */
         countryAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1)
+        countryAdapter.add("Selecione... ")
         countryNameSlugMap = mutableMapOf()
         countrySp.adapter = countryAdapter
         viewModel.fetchCountries().observe(
@@ -105,19 +108,44 @@ class DetalheCasosActivity : AppCompatActivity() {
     }
 
 
-    /* Função chamada quando é clicado o botão de busca */
-    fun onRetrieveClick(view: View){
-        when (infoSp.selectedItem.toString()) {
-            Information.DAY_ONE.type -> { fetchDayOne() }
-            Information.BY_COUNTRY.type -> { fetchByCountry() }
+    // Faz a passagem do status selecionado para a lingua inglesa para que o webService "entenda"
+    private fun convertStatus(): String {
+        val statusIngles = when (statusSp.selectedItem.toString()) {
+            Status.CONFIRMED.type -> "confirmed"
+            Status.DEATHS.type    -> "deaths"
+            Status.RECOVERED.type -> "recovered"
+            else ->  "Erro: Status inválido"
         }
+        return statusIngles
+    }
+
+
+    /* Função chamada quando é clicado o botão de busca, verificando se o país foi selecionado */
+    fun onRetrieveClick(view: View){
+                if (countrySp.selectedItemPosition == 0){
+                    val builder = AlertDialog.Builder(this@DetalheCasosActivity)
+                    builder.setTitle("Atenção")
+                    builder.setMessage("Selecione um país!")
+                    builder.setNeutralButton("OK", null)
+                    val dialog: AlertDialog = builder.create()
+                    dialog.show()
+                } else {
+                    when (infoSp.selectedItem.toString()) {
+                        Information.DAY_ONE.type -> {
+                            fetchDayOne()
+                        }
+                        Information.BY_COUNTRY.type -> {
+                            fetchByCountry()
+                        }
+                    }
+                }
     }
 
 
     private fun fetchDayOne(){
         val countrySlug = countryNameSlugMap[countrySp.selectedItem.toString()]!!
 
-        viewModel.fetchDayOne(countrySlug, statusSp.selectedItem.toString()).observe(
+        viewModel.fetchDayOne(countrySlug, convertStatus()).observe(
             this,
             Observer { casesList ->
                 if (viewModeTextRb.isChecked) {
@@ -141,7 +169,8 @@ class DetalheCasosActivity : AppCompatActivity() {
                     val pointsSeries = LineGraphSeries(pointsArrayList.toTypedArray())
                     resultGv.addSeries(pointsSeries)
 
-                    /* Formatando o gráfico */resultGv.gridLabelRenderer.setHumanRounding(false)
+                    /* Formatando o gráfico */
+                    resultGv.gridLabelRenderer.setHumanRounding(false)
                     resultGv.gridLabelRenderer.labelFormatter = DateAsXAxisLabelFormatter(this)
 
                     resultGv.gridLabelRenderer.numHorizontalLabels = 4
@@ -163,12 +192,12 @@ class DetalheCasosActivity : AppCompatActivity() {
 
     private fun fetchByCountry(){
         val countrySlug = countryNameSlugMap[countrySp.selectedItem.toString()]!!
-
         modoGrafico(ligado = false)
-        viewModel.fetchByCountry(countrySlug, statusSp.selectedItem.toString()).observe(
+
+        viewModel.fetchByCountry(countrySlug, convertStatus()).observe(
             this,
             Observer {casesList ->
-                resultTv.text = casesListToString(casesList)
+                    resultTv.text = casesListToString(casesList)
             }
         )
     }
@@ -217,7 +246,8 @@ class DetalheCasosActivity : AppCompatActivity() {
         return resultSb.toString()
     }
 
-    // Retorno de Intent para a activity origem (pode ser qualquer activity do projeto) que chamar a Books Detail Activity
+    /* Retorno de Intent para a activity origem (pode ser qualquer activity do projeto) que chamar
+    a Detailhe Casos Activity */
     companion object {
         fun getStartIntent (context: Context): Intent {
             return Intent (context, DetalheCasosActivity::class.java)
