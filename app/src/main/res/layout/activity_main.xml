@@ -19,31 +19,6 @@
         app:srcCompat="@drawable/covidlogo" />
 
     <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="5dp"
-        android:text="@string/label_ultima_atualizacao"
-        android:textSize="11sp"
-        android:textStyle="italic"
-        app:layout_constraintEnd_toStartOf="@+id/txtDataAtualizacao"
-        app:layout_constraintTop_toTopOf="@+id/txtDataAtualizacao"
-        tools:ignore="SmallSp" />
-
-    <TextView
-        android:id="@+id/txtDataAtualizacao"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="8dp"
-        android:hint="@string/label_data_hora"
-        android:textSize="11sp"
-        android:textStyle="italic"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cdvTotalRecovered"
-        tools:ignore="SmallSp" />
-
-    <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -87,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/label_casos_24_horas"
                 android:textAlignment="center"
-                android:textSize="11sp"
+                android:textSize="12sp"
                 tools:ignore="SmallSp" />
 
             <TextView
@@ -280,6 +255,31 @@
                 android:textStyle="bold" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="5dp"
+        android:text="@string/label_ultima_atualizacao"
+        android:textSize="12sp"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toStartOf="@+id/txtDataAtualizacao"
+        app:layout_constraintTop_toTopOf="@+id/txtDataAtualizacao"
+        tools:ignore="SmallSp" />
+
+    <TextView
+        android:id="@+id/txtDataAtualizacao"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="8dp"
+        android:hint="@string/label_data_hora"
+        android:textSize="12sp"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cdvTotalRecovered"
+        tools:ignore="SmallSp" />
 
     <Button
         android:id="@+id/btnCasesDayday"
