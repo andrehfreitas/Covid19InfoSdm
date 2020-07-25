@@ -85,20 +85,22 @@ class MainActivity : AppCompatActivity() {
                 val dataAplicada = formatoOrigem.parse(parteData)
                 formatoOrigem.applyPattern("dd/MM/yyyy")
                 val dataFormatada = formatoOrigem.format(dataAplicada)
+                val diaDataFormatada = dataFormatada.substring(0, 2)
+                val mesAnoDataFormatada = dataFormatada.substring(2, 10)
 
-                /* Ajuste da data para o fuso horário do Brasil, data retornada do WebService
+                /* Ajuste da data e da hora para o fuso horário do Brasil, data retornada do WebService
                  está 3 horas a frente do Brasil */
                 val horaNova = when (val horaOriginal =
                                    data.substring(indexT + 1, indexT + 3).toInt()) {
-                    0 -> 21
-                    1 -> 22
-                    2 -> 23
+                    0 -> 21 and diaDataFormatada.toInt() - 1
+                    1 -> 22 and diaDataFormatada.toInt() - 1
+                    2 -> 23 and diaDataFormatada.toInt() - 1
                     else -> horaOriginal - 3
                 }
                 val horaAjustada = String.format("%02d", horaNova) + data.substring(indexT + 3, indexZ)
 
                 // Exibição da data formatada e hora ajustada no TextView
-                txtDataAtualizacao.text = "$dataFormatada $horaAjustada"
+                txtDataAtualizacao.text = "$diaDataFormatada$mesAnoDataFormatada $horaAjustada"
             }
         )
     }
