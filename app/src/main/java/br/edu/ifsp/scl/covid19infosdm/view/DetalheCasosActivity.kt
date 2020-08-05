@@ -124,8 +124,8 @@ class DetalheCasosActivity : AppCompatActivity() {
     fun onRetrieveClick(view: View){
                 if (countrySp.selectedItemPosition == 0){
                     val builder = AlertDialog.Builder(this@DetalheCasosActivity)
-                    builder.setTitle("Atenção")
-                    builder.setMessage("Selecione um país!")
+                    builder.setTitle("Opss")
+                    builder.setMessage("Faltou selecionar um país!")
                     builder.setNeutralButton("OK", null)
                     val dialog: AlertDialog = builder.create()
                     dialog.show()

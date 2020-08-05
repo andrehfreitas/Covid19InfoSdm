@@ -12,8 +12,6 @@ import br.edu.ifsp.scl.covid19infosdm.viewmodel.Covid19ViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
-import java.time.format.DateTimeFormatter
-import java.time.format.ResolverStyle
 import java.util.*
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
@@ -73,10 +71,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     @SuppressLint("SetTextI18n", "SimpleDateFormat")
-    fun initData() {
+    private fun initData() {
         viewModel.fetchSummaryDate().observe(
             this,
             Observer {data ->
+
                 // Formatação da Data para formato usado no Brasil
                 val indexT = data.indexOf('T')
                 val indexZ = data.indexOf('Z')
@@ -85,28 +84,39 @@ class MainActivity : AppCompatActivity() {
                 val dataAplicada = formatoOrigem.parse(parteData)
                 formatoOrigem.applyPattern("dd/MM/yyyy")
                 val dataFormatada = formatoOrigem.format(dataAplicada)
-                val diaDataFormatada = dataFormatada.substring(0, 2)
+                var diaDataFormatada = dataFormatada.substring(0, 2).toInt()
                 val mesAnoDataFormatada = dataFormatada.substring(2, 10)
 
-                /* Ajuste da data e da hora para o fuso horário do Brasil, data retornada do WebService
-                 está 3 horas a frente do Brasil */
-                val horaNova = when (val horaOriginal =
-                                   data.substring(indexT + 1, indexT + 3).toInt()) {
-                    0 -> 21 and diaDataFormatada.toInt() - 1
-                    1 -> 22 and diaDataFormatada.toInt() - 1
-                    2 -> 23 and diaDataFormatada.toInt() - 1
-                    else -> horaOriginal - 3
+               /*Ajuste da data e da hora para o fuso horário do Brasil, data retornada do WebService
+                 está 3 horas a frente do Brasil*/
+
+                var horaOriginal = data.substring(indexT + 1, indexT + 3)
+                when (horaOriginal.toInt()){
+                    0 -> {
+                        horaOriginal = "21"
+                        diaDataFormatada -= 1
+                    }
+                    1 -> {
+                        horaOriginal = "22"
+                        diaDataFormatada -= 1
+                    }
+                    2 -> {
+                        horaOriginal = "23"
+                        diaDataFormatada -= 1
+                    }
+                    else -> {
+                        horaOriginal = (horaOriginal.toInt() - 3).toString()
+                    }
                 }
-                val horaAjustada = String.format("%02d", horaNova) + data.substring(indexT + 3, indexZ)
+                val horaAjustada = horaOriginal + data.substring(indexT + 3, indexZ)
 
                 // Exibição da data formatada e hora ajustada no TextView
-                txtDataAtualizacao.text = "$diaDataFormatada$mesAnoDataFormatada $horaAjustada"
+                txtDataAtualizacao.text = String.format("%02d", diaDataFormatada) + "$mesAnoDataFormatada $horaAjustada"
             }
         )
     }
 
-    @SuppressLint("SetTextI18n")
-    fun initGlobalData() {
+    private fun initGlobalData() {
         viewModel.fetchSummary().observe(
             this,
             Observer { summaryGlobal ->
@@ -121,7 +131,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun viewCountryData() {
-        // Carrefa TextViews com 0 por padrao e caso WebService nao retorne dados
+        // Carrega TextViews com 0 por padrao e caso WebService nao retorne dados
         txtNewCases24h.text = formatNumber(0)
         txtTotalCases.text = formatNumber(0)
         txtNewDeaths24h.text = formatNumber(0)
@@ -147,7 +157,7 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-// Formataçao do numero
+//Formatação dos números que são exibidos nas TextViews
 fun formatNumber(number: Int): String {
     val f = NumberFormat.getInstance(Locale("pt", "br"))
     val numeroFormatado = f.format(number)
