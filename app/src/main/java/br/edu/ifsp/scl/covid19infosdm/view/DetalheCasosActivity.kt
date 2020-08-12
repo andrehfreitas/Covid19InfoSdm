@@ -148,6 +148,7 @@ class DetalheCasosActivity : AppCompatActivity() {
             this,
             Observer { casesList ->
                 if (casesList.isEmpty()){
+                    modoGrafico(ligado = false)
                     resultTv.text = "Não existem dados para serem exibidos"
                 } else if (viewModeTextRb.isChecked) {
                     /* Exibição dos dados em modo texto */
@@ -198,6 +199,7 @@ class DetalheCasosActivity : AppCompatActivity() {
             this,
             Observer {casesList ->
                 if (casesList.isEmpty()){
+                    modoGrafico(ligado = false)
                     resultTv.text = "Não existem dados para serem exibidos"
                 } else {
                     resultTv.text = casesListToString(casesList)
