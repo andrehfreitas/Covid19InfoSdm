@@ -1,3 +1,8 @@
+// Novas Implementações
+// Implementação de Painel de casos de Covid que passou a ser a MainActivity
+// Correção do gráfico que quebrava quando API não retornava dados
+// Spinner onde os itens da lista estavam em inglês foram colocados em Português
+
 package br.edu.ifsp.scl.covid19infosdm.view
 
 import android.annotation.SuppressLint
