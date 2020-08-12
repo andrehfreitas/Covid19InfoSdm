@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Switch
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -121,24 +120,24 @@ class DetalheCasosActivity : AppCompatActivity() {
 
 
     /* Função chamada quando é clicado o botão de busca, verificando se o país foi selecionado */
-    fun onRetrieveClick(view: View){
-                if (countrySp.selectedItemPosition == 0){
-                    val builder = AlertDialog.Builder(this@DetalheCasosActivity)
-                    builder.setTitle("Opss")
-                    builder.setMessage("Faltou selecionar um país!")
-                    builder.setNeutralButton("OK", null)
-                    val dialog: AlertDialog = builder.create()
-                    dialog.show()
-                } else {
-                    when (infoSp.selectedItem.toString()) {
-                        Information.DAY_ONE.type -> {
-                            fetchDayOne()
-                        }
-                        Information.BY_COUNTRY.type -> {
-                            fetchByCountry()
-                        }
-                    }
+    fun onRetrieveClick(view: View) {
+        if (countrySp.selectedItemPosition == 0){
+            val builder = AlertDialog.Builder(this@DetalheCasosActivity)
+            builder.setTitle("Opss")
+            builder.setMessage("Faltou selecionar um país!")
+            builder.setNeutralButton("OK", null)
+            val dialog: AlertDialog = builder.create()
+            dialog.show()
+        } else {
+            when (infoSp.selectedItem.toString()) {
+                Information.DAY_ONE.type -> {
+                    fetchDayOne()
                 }
+                Information.BY_COUNTRY.type -> {
+                    fetchByCountry()
+                }
+            }
+        }
     }
 
 
@@ -148,12 +147,12 @@ class DetalheCasosActivity : AppCompatActivity() {
         viewModel.fetchDayOne(countrySlug, convertStatus()).observe(
             this,
             Observer { casesList ->
-                if (viewModeTextRb.isChecked) {
+                if (casesList.isEmpty()){
+                    resultTv.text = "Não existem dados para serem exibidos"
+                } else if (viewModeTextRb.isChecked) {
                     /* Exibição dos dados em modo texto */
                     modoGrafico(ligado = false)
-                    resultTv.text = casesListToString(casesList)
-                }
-                else {
+                } else {
                     /* Exibição dos dados em modo gráfico */
                     modoGrafico (ligado = true)
                     resultGv.removeAllSeries()

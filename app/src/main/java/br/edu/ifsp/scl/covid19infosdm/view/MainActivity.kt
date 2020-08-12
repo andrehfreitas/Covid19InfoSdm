@@ -89,7 +89,6 @@ class MainActivity : AppCompatActivity() {
 
                /*Ajuste da data e da hora para o fuso horário do Brasil, data retornada do WebService
                  está 3 horas a frente do Brasil*/
-
                 var horaOriginal = data.substring(indexT + 1, indexT + 3)
                 when (horaOriginal.toInt()){
                     0 -> {
