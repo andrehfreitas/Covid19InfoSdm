@@ -152,6 +152,7 @@ class DetalheCasosActivity : AppCompatActivity() {
                 } else if (viewModeTextRb.isChecked) {
                     /* Exibição dos dados em modo texto */
                     modoGrafico(ligado = false)
+                    resultTv.text = casesListToString(casesList)
                 } else {
                     /* Exibição dos dados em modo gráfico */
                     modoGrafico (ligado = true)
@@ -196,7 +197,11 @@ class DetalheCasosActivity : AppCompatActivity() {
         viewModel.fetchByCountry(countrySlug, convertStatus()).observe(
             this,
             Observer {casesList ->
+                if (casesList.isEmpty()){
+                    resultTv.text = "Não existem dados para serem exibidos"
+                } else {
                     resultTv.text = casesListToString(casesList)
+                }
             }
         )
     }
